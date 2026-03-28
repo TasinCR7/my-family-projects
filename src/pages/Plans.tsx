@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
-import { plans, familyMembers } from '@/data/mockData';
 import { useState } from 'react';
+import PDFExportButton from '@/components/PDFExportButton';
+import { usePlans, useMembers } from '@/hooks/useSupabaseData';
+import { Loader2 } from 'lucide-react';
 
 const tabs = ['সব', 'বিচারাধীন', 'চলমান', 'সম্পন্ন'];
 const tabMap: Record<string, string | null> = { 'সব': null, 'বিচারাধীন': 'pending', 'চলমান': 'in-progress', 'সম্পন্ন': 'completed' };
@@ -17,18 +19,34 @@ const statusLabels: Record<string, string> = {
 
 export default function Plans() {
   const [activeTab, setActiveTab] = useState('সব');
+  const { plans, loading: plansLoading } = usePlans();
+  const { members, loading: membersLoading } = useMembers();
+
+  const loading = plansLoading || membersLoading;
 
   const filtered = tabMap[activeTab]
     ? plans.filter(p => p.status === tabMap[activeTab])
     : plans;
 
-  const getMemberName = (id: string) => familyMembers.find(m => m.id === id)?.name || '';
+  const getMemberName = (id: string) => members.find(m => m.id === id)?.name || 'অজানা';
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <Loader2 size={40} className="animate-spin text-primary opacity-20" />
+        <p className="mt-4 text-sm text-muted-foreground">পরিকল্পনা লোড হচ্ছে...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">📋 পরিকল্পনা ও কার্য</h1>
-        <p className="text-muted-foreground text-sm mt-1">পরিবারের সকল পরিকল্পনা এখানে</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">📋 পরিকল্পনা ও কার্য</h1>
+          <p className="text-muted-foreground text-sm mt-1">পরিবারের সকল পরিকল্পনা এখানে</p>
+        </div>
+        <PDFExportButton targetId="plans-report" fileName="Family_Plans" title="পরিকল্পনা ও কার্য" />
       </div>
 
       {/* Tabs */}
@@ -47,31 +65,37 @@ export default function Plans() {
       </div>
 
       {/* Plans List */}
-      <div className="space-y-3">
-        {filtered.map((plan, i) => (
-          <motion.div
-            key={plan.id}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.05 }}
-            className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-start justify-between flex-wrap gap-3">
-              <div className="space-y-1">
-                <h3 className="font-semibold">{plan.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  দায়িত্বে: <span className="font-medium text-card-foreground">{getMemberName(plan.assignedTo)}</span>
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  শুরু: {plan.startDate} → শেষ: {plan.deadline} • {plan.category}
-                </p>
+      <div id="plans-report" className="space-y-3 bg-background p-2">
+        {filtered.length === 0 ? (
+          <div className="p-10 text-center text-muted-foreground bg-card rounded-xl border border-dashed">
+            এই ক্যাটাগরিতে কোনো পরিকল্পনা পাওয়া যায়নি।
+          </div>
+        ) : (
+          filtered.map((plan, i) => (
+            <motion.div
+              key={plan.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.05 }}
+              className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-start justify-between flex-wrap gap-3">
+                <div className="space-y-1">
+                  <h3 className="font-semibold">{plan.title}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    দায়িত্বে: <span className="font-medium text-card-foreground">{getMemberName(plan.assignedTo)}</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    শুরু: {plan.startDate} → শেষ: {plan.deadline} • {plan.category}
+                  </p>
+                </div>
+                <span className={`text-xs px-3 py-1 rounded-full font-medium ${statusColors[plan.status]}`}>
+                  {statusLabels[plan.status]}
+                </span>
               </div>
-              <span className={`text-xs px-3 py-1 rounded-full font-medium ${statusColors[plan.status]}`}>
-                {statusLabels[plan.status]}
-              </span>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))
+        )}
       </div>
     </div>
   );
