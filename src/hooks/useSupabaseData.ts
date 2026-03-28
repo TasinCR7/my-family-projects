@@ -5,89 +5,91 @@ export function useMembers() {
   const [members, setMembers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchMembers() {
-      const { data, error } = await supabase.from('members').select('*');
-      if (error) {
-        console.error('Error fetching members:', error);
-      } else {
-        // Map snake_case to camelCase
-        setMembers(data.map(m => ({
-          id: m.id.toString(),
-          name: m.name,
-          nameEn: m.name_en,
-          relation: m.relation,
-          age: m.birth_year ? (new Date().getFullYear() - parseInt(m.birth_year)) : 0,
-          phone: m.phone,
-          email: m.email,
-          avatar: '',
-          successRate: m.score || 0,
-          tasksCompleted: 0, 
-          tasksTotal: 10,
-          parentId: m.parent_id?.toString(),
-        })));
-      }
-      setLoading(false);
+  const fetchMembers = async () => {
+    const { data, error } = await supabase.from('members').select('*');
+    if (error) {
+      console.error('Error fetching members:', error);
+    } else {
+      setMembers(data.map(m => ({
+        id: m.id.toString(),
+        name: m.name,
+        nameEn: m.name_en,
+        relation: m.relation,
+        age: m.birth_year ? (new Date().getFullYear() - parseInt(m.birth_year)) : 0,
+        phone: m.phone,
+        email: m.email,
+        avatar: '',
+        successRate: m.score || 0,
+        tasksCompleted: 0, 
+        tasksTotal: 10,
+        parentId: m.parent_id?.toString(),
+      })));
     }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchMembers();
   }, []);
 
-  return { members, loading };
+  return { members, loading, refetch: fetchMembers };
 }
 
 export function useExpenses() {
   const [expenses, setExpenses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchExpenses() {
-      const { data, error } = await supabase.from('expenses').select('*');
-      if (error) {
-        console.error('Error fetching expenses:', error);
-      } else {
-        setExpenses(data.map(e => ({
-          id: e.id.toString(),
-          amount: parseFloat(e.amount),
-          date: e.date,
-          category: e.category,
-          paidBy: e.member_id?.toString(),
-          description: e.description,
-        })));
-      }
-      setLoading(false);
+  const fetchExpenses = async () => {
+    const { data, error } = await supabase.from('expenses').select('*');
+    if (error) {
+      console.error('Error fetching expenses:', error);
+    } else {
+      setExpenses(data.map(e => ({
+        id: e.id.toString(),
+        amount: parseFloat(e.amount),
+        date: e.date,
+        category: e.category,
+        paidBy: e.member_id?.toString(),
+        description: e.description,
+      })));
     }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchExpenses();
   }, []);
 
-  return { expenses, loading };
+  return { expenses, loading, refetch: fetchExpenses };
 }
 
 export function usePlans() {
   const [plans, setPlans] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchPlans() {
-      const { data, error } = await supabase.from('tasks').select('*');
-      if (error) {
-        console.error('Error fetching plans:', error);
-      } else {
-        setPlans(data.map(p => ({
-          id: p.id.toString(),
-          title: p.title,
-          assignedTo: p.member_id?.toString(),
-          startDate: p.created_at?.split('T')[0],
-          deadline: p.deadline,
-          category: p.priority || 'মাঝারি',
-          status: p.status === 'সম্পন্ন' ? 'completed' : p.status === 'চলমান' ? 'in-progress' : 'pending',
-        })));
-      }
-      setLoading(false);
+  const fetchPlans = async () => {
+    const { data, error } = await supabase.from('tasks').select('*');
+    if (error) {
+      console.error('Error fetching plans:', error);
+    } else {
+      setPlans(data.map(p => ({
+        id: p.id.toString(),
+        title: p.title,
+        assignedTo: p.member_id?.toString(),
+        startDate: p.created_at?.split('T')[0],
+        deadline: p.deadline,
+        category: p.priority || 'মাঝারি',
+        status: p.status === 'সম্পন্ন' ? 'completed' : p.status === 'চলমান' ? 'in-progress' : 'pending',
+      })));
     }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchPlans();
   }, []);
 
-  return { plans, loading };
+  return { plans, loading, refetch: fetchPlans };
 }
 
 export function useGallery() {
@@ -134,29 +136,30 @@ export function useLandRecords() {
   const [lands, setLands] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchLand() {
-      const { data, error } = await supabase.from('land_records').select('*');
-      if (error) {
-        console.error('Error fetching land:', error);
-      } else {
-        setLands(data.map(l => ({
-          id: l.id.toString(),
-          location: l.location,
-          mouza: l.mouza || 'অজানা',
-          dag: l.dag_no || 'নেই',
-          area: l.area || 'নেই',
-          value: l.value || '০',
-          status: l.status === 'নিষ্পত্তি' ? 'resolved' : l.status === 'চলমান' ? 'pending' : 'partial',
-          progress: l.docs_count ? (l.docs_count * 20) : 0,
-        })));
-      }
-      setLoading(false);
+  const fetchLand = async () => {
+    const { data, error } = await supabase.from('land_records').select('*');
+    if (error) {
+      console.error('Error fetching land:', error);
+    } else {
+      setLands(data.map(l => ({
+        id: l.id.toString(),
+        location: l.location,
+        mouza: l.mouza || 'অজানা',
+        dag: l.dag_no || 'নেই',
+        area: l.area || 'নেই',
+        value: l.value || '০',
+        status: l.status === 'নিষ্পত্তি' ? 'resolved' : l.status === 'চলমান' ? 'pending' : 'partial',
+        progress: l.docs_count ? (l.docs_count * 20) : 0,
+      })));
     }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchLand();
   }, []);
 
-  return { lands, loading };
+  return { lands, loading, refetch: fetchLand };
 }
 
 export function useNotices() {
@@ -203,18 +206,39 @@ export function useEvents() {
   const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchEvents() {
-      const { data, error } = await supabase.from('events').select('*').order('date', { ascending: true });
-      if (error) {
-        console.error('Error fetching events:', error);
-      } else {
-        setEvents(data || []);
-      }
-      setLoading(false);
+  const fetchEvents = async () => {
+    const { data, error } = await supabase.from('events').select('*').order('date', { ascending: true });
+    if (error) {
+      console.error('Error fetching events:', error);
+    } else {
+      setEvents(data || []);
     }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchEvents();
   }, []);
 
-  return { events, loading };
+  return { events, loading, refetch: fetchEvents };
+}
+
+export function useInsertData(tableName: string) {
+  const [isInserting, setIsInserting] = useState(false);
+
+  const insertData = async (data: any) => {
+    setIsInserting(true);
+    try {
+      const { error } = await supabase.from(tableName).insert([data]);
+      if (error) throw error;
+      return { success: true };
+    } catch (error: any) {
+      console.error(`Error inserting into ${tableName}:`, error);
+      return { success: false, error: error.message };
+    } finally {
+      setIsInserting(false);
+    }
+  };
+
+  return { insertData, isInserting };
 }

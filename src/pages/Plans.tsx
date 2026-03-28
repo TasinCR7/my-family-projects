@@ -3,6 +3,7 @@ import { useState } from 'react';
 import PDFExportButton from '@/components/PDFExportButton';
 import { usePlans, useMembers } from '@/hooks/useSupabaseData';
 import { Loader2 } from 'lucide-react';
+import AddTaskModal from '@/components/modals/AddTaskModal';
 
 const tabs = ['সব', 'বিচারাধীন', 'চলমান', 'সম্পন্ন'];
 const tabMap: Record<string, string | null> = { 'সব': null, 'বিচারাধীন': 'pending', 'চলমান': 'in-progress', 'সম্পন্ন': 'completed' };
@@ -19,7 +20,7 @@ const statusLabels: Record<string, string> = {
 
 export default function Plans() {
   const [activeTab, setActiveTab] = useState('সব');
-  const { plans, loading: plansLoading } = usePlans();
+  const { plans, loading: plansLoading, refetch } = usePlans();
   const { members, loading: membersLoading } = useMembers();
 
   const loading = plansLoading || membersLoading;
@@ -41,12 +42,15 @@ export default function Plans() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold">📋 পরিকল্পনা ও কার্য</h1>
           <p className="text-muted-foreground text-sm mt-1">পরিবারের সকল পরিকল্পনা এখানে</p>
         </div>
-        <PDFExportButton targetId="plans-report" fileName="Family_Plans" title="পরিকল্পনা ও কার্য" />
+        <div className="flex items-center gap-2">
+          <AddTaskModal onSuccess={refetch} />
+          <PDFExportButton targetId="plans-report" fileName="Family_Plans" title="পরিকল্পনা ও কার্য" />
+        </div>
       </div>
 
       {/* Tabs */}

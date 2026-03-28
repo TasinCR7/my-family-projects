@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { MapPin, Loader2, Landmark } from 'lucide-react';
 import { useLandRecords } from '@/hooks/useSupabaseData';
+import AddLandRecordModal from '@/components/modals/AddLandRecordModal';
 
 const statusConfig: Record<string, { label: string; color: string }> = {
   resolved: { label: 'সমাধান হয়েছে', color: 'bg-success/20 text-success' },
@@ -10,7 +11,7 @@ const statusConfig: Record<string, { label: string; color: string }> = {
 };
 
 export default function LandManagement() {
-  const { lands, loading } = useLandRecords();
+  const { lands, loading, refetch } = useLandRecords();
 
   if (loading) {
     return (
@@ -23,9 +24,12 @@ export default function LandManagement() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">🏞️ জমি ব্যবস্থাপনা</h1>
-        <p className="text-muted-foreground text-sm mt-1">পারিবারিক জমি ও সম্পত্তির তথ্য</p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">🏞️ জমি ব্যবস্থাপনা</h1>
+          <p className="text-muted-foreground text-sm mt-1">পারিবারিক জমি ও সম্পত্তির তথ্য</p>
+        </div>
+        <AddLandRecordModal onSuccess={refetch} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

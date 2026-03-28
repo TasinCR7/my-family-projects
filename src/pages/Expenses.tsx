@@ -2,9 +2,10 @@ import { motion } from 'framer-motion';
 import PDFExportButton from '@/components/PDFExportButton';
 import { useExpenses, useMembers } from '@/hooks/useSupabaseData';
 import { Loader2 } from 'lucide-react';
+import AddExpenseModal from '@/components/modals/AddExpenseModal';
 
 export default function Expenses() {
-  const { expenses, loading: expensesLoading } = useExpenses();
+  const { expenses, loading: expensesLoading, refetch } = useExpenses();
   const { members, loading: membersLoading } = useMembers();
 
   const loading = expensesLoading || membersLoading;
@@ -22,12 +23,15 @@ export default function Expenses() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold">💰 ব্যয় হিসাব</h1>
           <p className="text-muted-foreground text-sm mt-1">পরিবারের সকল খরচের বিবরণ</p>
         </div>
-        <PDFExportButton targetId="expenses-report" fileName="Family_Expenses" title="ব্যয় হিসাব" />
+        <div className="flex items-center gap-2">
+          <AddExpenseModal onSuccess={refetch} />
+          <PDFExportButton targetId="expenses-report" fileName="Family_Expenses" title="ব্যয় হিসাব" />
+        </div>
       </div>
 
       <div id="expenses-report" className="space-y-6 bg-background p-4 rounded-xl border border-transparent">
