@@ -63,9 +63,9 @@ const Login: React.FC = () => {
           <motion.div
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
-            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/20 mb-4 backdrop-blur-xl border border-primary/30"
+            className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary/10 mb-4 backdrop-blur-xl border border-primary/20 shadow-xl overflow-hidden"
           >
-            <LogIn size={32} className="text-primary" />
+            <img src="/favicon.png" alt="Gafur Family Logo" className="w-full h-full object-cover" />
           </motion.div>
           <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
             অমদের ফ্যামিলি হাব

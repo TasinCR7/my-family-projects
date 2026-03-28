@@ -40,8 +40,8 @@ export default function AppSidebar() {
     >
       {/* Logo */}
       <div className="flex items-center gap-3 p-4 border-b border-sidebar-border min-h-[72px]">
-        <div className="w-10 h-10 rounded-full gradient-gold flex items-center justify-center text-sidebar-primary-foreground font-bold text-lg shrink-0">
-          গ
+        <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg border border-sidebar-border/50 shrink-0">
+          <img src="/favicon.png" alt="Logo" className="w-full h-full object-cover" />
         </div>
         <AnimatePresence>
           {!collapsed && (
