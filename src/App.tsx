@@ -18,6 +18,9 @@ import Notices from "@/pages/Notices";
 import Voting from "@/pages/Voting";
 import Events from "@/pages/Events";
 import NotFound from "./pages/NotFound.tsx";
+import Login from "@/pages/Login"; // New login page
+import ProtectedRoute from "@/components/auth/ProtectedRoute"; // Route protector
+import { AuthProvider } from "@/context/AuthContext"; // Auth context
 
 const queryClient = new QueryClient();
 
@@ -26,25 +29,33 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route element={<AppLayout />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/members" element={<Members />} />
-            <Route path="/plans" element={<Plans />} />
-            <Route path="/success" element={<SuccessTracker />} />
-            <Route path="/expenses" element={<Expenses />} />
-            <Route path="/land" element={<LandManagement />} />
-            <Route path="/family-tree" element={<FamilyTree />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/documents" element={<Vault />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/notices" element={<Notices />} />
-            <Route path="/voting" element={<Voting />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Public Route */}
+            <Route path="/login" element={<Login />} />
+
+            {/* Protected Routes */}
+            <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/members" element={<Members />} />
+              <Route path="/plans" element={<Plans />} />
+              <Route path="/success" element={<SuccessTracker />} />
+              <Route path="/expenses" element={<Expenses />} />
+              <Route path="/land" element={<LandManagement />} />
+              <Route path="/family-tree" element={<FamilyTree />} />
+              <Route path="/gallery" element={<Gallery />} />
+              <Route path="/documents" element={<Vault />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/notices" element={<Notices />} />
+              <Route path="/voting" element={<Voting />} />
+            </Route>
+
+            {/* fallback */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
