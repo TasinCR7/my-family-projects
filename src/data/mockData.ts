@@ -32,12 +32,15 @@ export interface Expense {
 }
 
 export const familyMembers: FamilyMember[] = [
-  { id: '1', name: 'আব্দুল করিম', nameEn: 'Abdul Karim', relation: 'বড় ছেলে', age: 55, phone: '+880171XXXXXXX', email: 'karim@family.com', avatar: '', successRate: 85, tasksCompleted: 17, tasksTotal: 20 },
-  { id: '2', name: 'আব্দুল হালিম', nameEn: 'Abdul Halim', relation: 'মেজো ছেলে', age: 50, phone: '+880172XXXXXXX', email: 'halim@family.com', avatar: '', successRate: 78, tasksCompleted: 14, tasksTotal: 18 },
-  { id: '3', name: 'আব্দুল রহিম', nameEn: 'Abdul Rahim', relation: 'সেজো ছেলে', age: 45, phone: '+880173XXXXXXX', email: 'rahim@family.com', avatar: '', successRate: 92, tasksCompleted: 23, tasksTotal: 25 },
-  { id: '4', name: 'ফাতেমা বেগম', nameEn: 'Fatema Begum', relation: 'বড় মেয়ে', age: 48, phone: '+880174XXXXXXX', email: 'fatema@family.com', avatar: '', successRate: 88, tasksCompleted: 15, tasksTotal: 17 },
-  { id: '5', name: 'আয়েশা খাতুন', nameEn: 'Ayesha Khatun', relation: 'ছোট মেয়ে', age: 42, phone: '+880175XXXXXXX', email: 'ayesha@family.com', avatar: '', successRate: 95, tasksCompleted: 19, tasksTotal: 20 },
-  { id: '6', name: 'মোহাম্মদ সাইফ', nameEn: 'Mohammad Saif', relation: 'নাতি', age: 28, phone: '+880176XXXXXXX', email: 'saif@family.com', avatar: '', successRate: 70, tasksCompleted: 7, tasksTotal: 10 },
+  { id: '1', name: 'আব্দুল গফুর', nameEn: 'Abdul Gafur', relation: 'পিতা', age: 75, phone: '+8801700000000', email: 'gafur@family.com', avatar: '', successRate: 100, tasksCompleted: 50, tasksTotal: 50 },
+  { id: '2', name: 'জাফর আহমেদ', nameEn: 'Zafar Ahmed', relation: 'ছেলে', age: 50, phone: '+8801710000000', email: 'zafar@family.com', avatar: '', successRate: 85, tasksCompleted: 15, tasksTotal: 20 },
+  { id: '3', name: 'মোজাফফর আহমেদ', nameEn: 'Mozaffar Ahmed', relation: 'ছেলে', age: 48, phone: '+8801720000000', email: 'mozaffar@family.com', avatar: '', successRate: 78, tasksCompleted: 12, tasksTotal: 18 },
+  { id: '4', name: 'আব্দুর রউফ', nameEn: 'Abdur Rouf', relation: 'ছেলে', age: 45, phone: '+8801730000000', email: 'rouf@family.com', avatar: '', successRate: 92, tasksCompleted: 20, tasksTotal: 25 },
+  { id: '5', name: 'মোহাম্মদ মুজিবুর রহমান', nameEn: 'Mohammad Mujibur Rahman', relation: 'ছেলে', age: 42, phone: '+8801740000000', email: 'mujibur@family.com', avatar: '', successRate: 88, tasksCompleted: 14, tasksTotal: 17 },
+  { id: '6', name: 'আবু তৈয়ব', nameEn: 'Abu Tayeb', relation: 'ছেলে', age: 38, phone: '+8801750000000', email: 'tayeb@family.com', avatar: '', successRate: 95, tasksCompleted: 18, tasksTotal: 20 },
+  { id: '7', name: 'রওশন আরা', nameEn: 'Rowshan Ara', relation: 'মেয়ে', age: 52, phone: '+8801760000000', email: 'rowshan@family.com', avatar: '', successRate: 90, tasksCompleted: 10, tasksTotal: 11 },
+  { id: '8', name: 'মুন্নী', nameEn: 'Munni', relation: 'মেয়ে', age: 46, phone: '+8801770000000', email: 'munni@family.com', avatar: '', successRate: 82, tasksCompleted: 9, tasksTotal: 12 },
+  { id: '9', name: 'হাসনারা বেগম লাকি', nameEn: 'Hasnara Begum Lucky', relation: 'মেয়ে', age: 40, phone: '+8801780000000', email: 'hasnara@family.com', avatar: '', successRate: 88, tasksCompleted: 11, tasksTotal: 13 },
 ];
 
 export const plans: Plan[] = [
