@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion';
 import { useVault } from '@/hooks/useSupabaseData';
-import { Loader2, FileText, Download, ShieldCheck } from 'lucide-react';
+import { Loader2, FileText, Download, ShieldCheck, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import AddDocumentModal from '@/components/modals/AddDocumentModal';
 
 export default function Vault() {
-  const { documents, loading } = useVault();
+  const { documents, loading, refetch } = useVault();
 
   if (loading) {
     return (
@@ -17,13 +18,16 @@ export default function Vault() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">📁 ডকুমেন্ট ভল্ট</h1>
           <p className="text-muted-foreground text-sm mt-1">পরিবারের গোপনীয় ও গুরুত্বপূর্ণ নথিপত্র</p>
         </div>
-        <div className="flex items-center gap-2 bg-success/10 text-success px-4 py-2 rounded-full text-xs font-bold border border-success/20">
-          <ShieldCheck size={16} /> এনক্রিপ্টেড সুরক্ষিত
+        <div className="flex flex-col sm:flex-row items-end gap-3">
+          <div className="flex items-center gap-2 bg-success/10 text-success px-4 py-2 rounded-full text-[10px] font-bold border border-success/20">
+            <ShieldCheck size={14} /> এনক্রিপ্টেড সুরক্ষিত
+          </div>
+          <AddDocumentModal onSuccess={() => window.location.reload()} />
         </div>
       </div>
 
@@ -48,16 +52,18 @@ export default function Vault() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-sm truncate">{doc.name}</h3>
-                  <p className="text-xs text-muted-foreground mt-1">{doc.file_type} • {doc.file_size || 'N/A'}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{doc.file_type} • {doc.file_size}</p>
                   <p className="text-[10px] text-muted-foreground mt-0.5">আপলোড: {new Date(doc.uploaded_at).toLocaleDateString()}</p>
                 </div>
               </div>
               <div className="mt-5 flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted px-2 py-1 rounded">
-                  {doc.access_level || 'অ্যাডমিন'}
+                  {doc.access_level}
                 </span>
-                <Button variant="ghost" size="sm" className="h-8 text-primary hover:bg-primary/5">
-                  <Download size={14} className="mr-1.5" /> ডাউনলোড
+                <Button variant="ghost" size="sm" className="h-8 text-primary hover:bg-primary/5" asChild>
+                  <a href={doc.url} target="_blank" rel="noopener noreferrer">
+                    <Download size={14} className="mr-1.5" /> ডাউনলোড <ExternalLink size={10} className="ml-1 opacity-50" />
+                  </a>
                 </Button>
               </div>
             </motion.div>

@@ -116,20 +116,29 @@ export function useVault() {
   const [documents, setDocuments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchVault() {
-      const { data, error } = await supabase.from('vault').select('*');
-      if (error) {
-        console.error('Error fetching vault:', error);
-      } else {
-        setDocuments(data || []);
-      }
-      setLoading(false);
+  const fetchVault = async () => {
+    const { data, error } = await supabase.from('vault').select('*');
+    if (error) {
+      console.error('Error fetching vault:', error);
+    } else {
+      setDocuments(data.map(d => ({
+        id: d.id,
+        name: d.document_name,
+        url: d.document_url,
+        file_type: d.file_type || 'PDF',
+        file_size: d.file_size || '0 MB',
+        uploaded_at: d.created_at,
+        access_level: 'অ্যাডমিন'
+      })));
     }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchVault();
   }, []);
 
-  return { documents, loading };
+  return { documents, loading, refetch: fetchVault };
 }
 
 export function useLandRecords() {
@@ -150,6 +159,7 @@ export function useLandRecords() {
         value: l.value || '০',
         status: l.status === 'নিষ্পত্তি' ? 'resolved' : l.status === 'চলমান' ? 'pending' : 'partial',
         progress: l.docs_count ? (l.docs_count * 20) : 0,
+        document_url: l.document_url,
       })));
     }
     setLoading(false);

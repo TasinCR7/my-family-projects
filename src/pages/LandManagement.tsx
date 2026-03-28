@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
-import { MapPin, Loader2, Landmark } from 'lucide-react';
+import { MapPin, Loader2, Landmark, FileText, ExternalLink } from 'lucide-react';
 import { useLandRecords } from '@/hooks/useSupabaseData';
 import AddLandRecordModal from '@/components/modals/AddLandRecordModal';
+import { Button } from '@/components/ui/button';
 
 const statusConfig: Record<string, { label: string; color: string }> = {
   resolved: { label: 'সমাধান হয়েছে', color: 'bg-success/20 text-success' },
@@ -45,7 +46,7 @@ export default function LandManagement() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="bg-card rounded-xl border border-border p-5 space-y-3 hover:shadow-md transition-shadow"
+              className="bg-card rounded-xl border border-border p-5 space-y-3 hover:shadow-md transition-shadow flex flex-col"
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-2">
@@ -62,7 +63,23 @@ export default function LandManagement() {
                 <p>আয়তন: {land.area}</p>
                 <p>মূল্য: ৳{land.value}</p>
               </div>
-              <div>
+
+              {land.document_url && (
+                <div className="pt-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full text-xs h-9 bg-primary/5 border-primary/20 hover:bg-primary/10 text-primary"
+                    asChild
+                  >
+                    <a href={land.document_url} target="_blank" rel="noopener noreferrer">
+                      <FileText size={14} className="mr-2" /> দলিল দেখুন <ExternalLink size={12} className="ml-2 opacity-50" />
+                    </a>
+                  </Button>
+                </div>
+              )}
+
+              <div className="mt-auto pt-4 border-t border-border/50">
                 <div className="flex justify-between text-xs mb-1">
                   <span className="text-muted-foreground">নিষ্পত্তি অগ্রগতি</span>
                   <span className="font-medium">{land.progress}%</span>
